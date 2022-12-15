@@ -1,19 +1,20 @@
 import { useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { CityName, cityNames } from '../../const/const';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { fetchOffersAction } from '../../store/api-actions';
 import { changeCity } from '../../store/offers-slice';
 import { getSelectedCity } from '../../store/selectors';
 
 
 export default function HeaderNav(): JSX.Element {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const selectedCity = useAppSelector(getSelectedCity);
   const [active, setActive] = useState(selectedCity);
   const cityNamesList = useMemo(() => Object.values(cityNames).map((city) => city.name), []);
 
   const changeCityHandler = (evt: React.MouseEvent<HTMLElement>, cityName: CityName) => {
     evt.preventDefault();
+    dispatch(fetchOffersAction());
     dispatch(changeCity(cityName));
     setActive(cityName);
   };
